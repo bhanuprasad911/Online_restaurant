@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+.main {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5%;
+}
+.inner {
+  display: flex;
+  width: 100%;
+  height: 50%;
+  background-color: rgb(241, 241, 241);
+  flex-direction: column;
+  align-items: center;
+  padding: 2%;
+  padding-top: 0;
+  border-radius: 30px;
+}
+.closeButton {
+  width: 17%;
+  height: 10%;
+  background-color: black;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.textareadiv {
+  background-color: white;
+  width: 90%;
+  height: 20%;
+  padding: 2%;
+  border-radius: 8px;
+}
+.textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  background-color: rgb(241, 241, 241);
+  border-radius: 5px;
+  border: 1px solid rgb(200, 200, 200);
+  outline: none;
+  padding: 1%;
+}
+.buttons {
+  width: 100%;
+  height: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.buttons > button {
+  width: 45%;
+  height: 100%;
+  border: none;
+  border-radius: 10px;
+  font-size: large;
+  cursor: pointer;
+}
+.cancel {
+    color: black;
+    background-color: rgb(241, 241, 241);
+}
+.next {
+    color: white;
+    background-color: rgb(92, 92, 92);
+}
+.tag{
+    width: 90%;
+    font-size: small;
+    color: rgb(161, 161, 161) ;
+}
+.head{
+    font-size: x-large;
+    width: 90%;
+    text-align: left;
+}

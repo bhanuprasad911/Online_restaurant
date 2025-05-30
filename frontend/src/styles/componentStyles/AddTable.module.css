@@ -1,0 +1,67 @@
+.main {
+  height: 17%;
+  width: 9%;
+  border: 1px dashed grey;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  border-radius: 10px;
+  position: relative;
+}
+.showForm {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: xx-large;
+}
+.form {
+  position: absolute;
+  height: 130%;
+  width: 120%;
+  top: 10%;
+  left: 70%;
+  background-color: rgb(240, 245, 243);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 2%;
+
+}
+.nameinput {
+  border: none;
+  outline: none;
+  color: grey;
+  font-size: small;
+  background: none;
+  width: 95%;
+}
+.number{
+    font-size: xx-large;
+    border-bottom: 1px dashed grey;
+    width: 80%;
+    text-align: center;
+
+}
+.select{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5%;
+}
+.addtable{
+    width: 80%;
+    padding:5% 2%;
+    font-size: medium;
+    border-radius: 8px;
+    background-color: rgb(80,80,80);
+    cursor: pointer;
+    color: white;
+    border: none;
+}

@@ -1,0 +1,141 @@
+.wish {
+  font-size: large;
+  color: black;
+}
+.span {
+  font-size: small;
+}
+.search {
+  width: 100%;
+  padding: 3%;
+  padding-left: 10%;
+  font-size: large;
+  border-radius: 7px;
+  outline: none;
+  background-color: rgb(247, 245, 245);
+  border: none;
+}
+.searchIcon {
+  position: absolute;
+  left: 35.5%;
+  top: 9.7%;
+  color: grey;
+}
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  /* padding: 2%; */
+}
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 50%;
+}
+.innerdiv {
+  width: 30vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1% 2%;
+}
+
+.filters {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 3%;
+}
+.items {
+  width: 100%;
+  height: 65vh;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+.filterbutton {
+  background: none;
+  border: none;
+  padding: 0%;
+  width: 18%;
+}
+.next {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid black; */
+  padding: 2%;
+  margin-top: 1%;
+  background-color: rgb(240, 240, 240);
+  border-radius: 7px;
+}
+.nextButton {
+  cursor: pointer;
+  border: none;
+  background-color: rgb(192, 33, 42);
+  color: white;
+  padding: 2% 3%;
+  border-radius: 7px;
+  font-size: medium;
+}
+.link {
+  text-decoration: none;
+  color: white;
+}
+@media screen and (max-width: 768px) {
+  .innerdiv {
+    width: 60%;
+  }
+  .searchIcon{
+    left: 20%;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .innerdiv {
+    width: 70%;
+  }
+  .searchIcon{
+    top: 9%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .innerdiv {
+    width: 60%;
+  }
+  .searchIcon{
+    left: 22.5%;
+    top: 8.5%;
+  }
+}
+@media screen and (min-width: 1200px) {
+    .innerdiv{
+        width: 30%;
+        box-shadow: 0px 0px 10px grey;
+    }
+    .searchIcon{
+        left: 37.8%;
+        top: 9.7%;
+    }
+    
+}
+
+@media screen and (max-width: 600px) {
+  .innerdiv {
+    width: 100%;
+    height: 100%;
+  }
+  .searchIcon{
+    left: 5%;
+    top: 8.5%;
+  }
+}
