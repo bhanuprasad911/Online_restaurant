@@ -117,6 +117,8 @@ function OrderPage() {
 
   return (
     <div className={styles.main}>
+      <div className={styles.innerDiv}>
+
       <div className={styles.header}>
         <p className={styles.wish}>
           Good evening <br />
@@ -125,15 +127,9 @@ function OrderPage() {
       </div>
       <br />
       <input type="text" className={styles.search} placeholder="Search" />
-      <CiSearch
-        style={{
-          position: "absolute",
-          left: "5%",
-          top: "8.8%",
-          color: "grey",
-        }}
+      <CiSearch className={styles.searchIcon}
         size={25}
-      />
+        />
       <div className={styles.item}>
         {order?.length > 0 ? (
           order.map((item, index) => {
@@ -157,17 +153,17 @@ function OrderPage() {
         <button
           onClick={() => setInstructionsForm(true)}
           className={styles.addInstructions}
-        >
+          >
           Add
         </button>
       </div>
       {instructionsForm && (
         <CookingInstructionsForm
-          setShowForm={setInstructionsForm}
-          inst={cookingInstructions}
+        setShowForm={setInstructionsForm}
+        inst={cookingInstructions}
           setInst={setCookingInstructions}
-        />
-      )}
+          />
+        )}
 
       <div className={styles.buttons}>
         <button
@@ -177,7 +173,7 @@ function OrderPage() {
           onClick={() => {
             setType("Dine In");
           }}
-        >
+          >
           Dine In
         </button>
         <button
@@ -187,7 +183,7 @@ function OrderPage() {
           onClick={() => {
             setType("Take Away");
           }}
-        >
+          >
           Take Away
         </button>
       </div>
@@ -215,22 +211,21 @@ function OrderPage() {
         <p className={styles.detailsHead}>Your details</p>
         {showDefailsForm || !currentUser ? (
           <button
-            className={styles.addUser}
-            onClick={() => setShowDetailsForm(true)}
+          className={styles.addUser}
+          onClick={() => setShowDetailsForm(true)}
           >
             Add your details here
           </button>
         ) : (
           <p
-            className={styles.userdetails}
+          className={styles.userdetails}
           >{`${currentUser?.name}, +91 ${currentUser?.number}`}</p>
         )}
       </div>
       {showDefailsForm && (
         <UserDetailsForm
-          showForm={setShowDetailsForm}
-          setuser={setCurrentUser}
-          type={type}
+        showForm={setShowDetailsForm}
+        setuser={setCurrentUser}
         />
       )}
       <div className={styles.address}>
@@ -255,6 +250,7 @@ function OrderPage() {
         )}
       </div>
       <SwipeButton onSuccess={success} />
+        </div>
     </div>
   );
 }

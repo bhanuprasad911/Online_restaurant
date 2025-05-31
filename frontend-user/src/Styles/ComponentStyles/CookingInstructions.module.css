@@ -7,10 +7,12 @@
   height: 100%;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.8);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  gap: 5%;
+  gap: 7%;
+  padding-top: 5%;
+  z-index: 100;
 }
 .inner {
   display: flex;

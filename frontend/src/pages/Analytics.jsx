@@ -87,7 +87,7 @@ function Analytics() {
 
   const total = filteredOrders.length;
   const servedCount = filteredOrders.filter(
-    (order) => order.status?.trim().toLowerCase() !== "not picked up"
+    (order) => order.status?.trim().toLowerCase() === "done" && order.type?.trim() === "Dine In"
   ).length;
   const dineInCount = filteredOrders.filter((order) => order.type === "Dine In").length;
   const takeAwayCount = filteredOrders.filter((order) => order.type === "Take Away").length;

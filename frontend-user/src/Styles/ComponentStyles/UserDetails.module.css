@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 8%;
+    z-index: 100;
 
 }
 .input{

@@ -3,12 +3,12 @@ import styles from '../Styles/ComponentStyles/UserDetails.module.css'
 import { addUser } from '../libs/services'
 import toast from 'react-hot-toast'
 
-function UserDetailsForm({showForm, setuser, type}) {
+function UserDetailsForm({showForm, setuser}) {
   const [pending, setPending] = useState(false)
    const [formData, setFormData]=useState({
     name:'',
     number:'',
-    address:type==="Take Away"?"":"Na"
+    address:""
    })
 const handleAaddUser = async()=>{
     if (formData.name.trim().length===0 || formData.number.trim().length===0 || formData.address.trim().length===0) {
@@ -33,7 +33,7 @@ const handleAaddUser = async()=>{
     <div className={styles.main}>
         <input type="text" className={styles.input} value={formData.name} placeholder='Name' onChange={(e)=>setFormData({...formData, name:e.target.value})}/>
         <input type="text" className={styles.input} value={formData.number} placeholder='Number' onChange={(e)=>setFormData({...formData, number:e.target.value})}/>
-       {type === "Take Away" &&  <input type="text" className={styles.input} value={formData.address} placeholder='Address' onChange={(e)=>setFormData({...formData, address:e.target.value})}/>}
+       <input type="text" className={styles.input} value={formData.address} placeholder='Address' onChange={(e)=>setFormData({...formData, address:e.target.value})}/>
         <button onClick={()=>{
           handleAaddUser()
           setPending(true)
