@@ -39,7 +39,7 @@
     height: 38vh;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     margin: 3vh 0;
     
     gap: 1%;
@@ -185,6 +185,13 @@
         justify-content: center;
         gap: 5%;
     color: grey;
+}
+.notSelected{
+    display: none !important;
+     
+}
+.notselectedDiv{
+    justify-content: center;
 }
 
 

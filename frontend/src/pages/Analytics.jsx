@@ -13,8 +13,10 @@ import {
   getOrders,
   getUsers,
 } from "../libs/services.js";
-import {PieChart} from 'react-minimal-pie-chart'
-import {Chart} from 'react-google-charts'
+import { Chart } from "react-google-charts";
+import { filterOrdersByRange, aggregateOrders } from "../libs/utils.js";
+import OrderChart from "../components/OrderChart.jsx";
+
 
 function Analytics() {
   const [filter, setFilter] = useState("");
@@ -25,6 +27,9 @@ function Analytics() {
   const [tables, setTables] = useState([]);
   const [orderFilter, setOrderFilter] = useState("daily");
   const [graphFilter, setGraphFilter] = useState("daily");
+
+  const graphData = useMemo(() => aggregateOrders(orders, graphFilter), [orders, graphFilter]);
+  console.log(orders)
 
   const updateData = async () => {
     const userData = await getUsers();
@@ -52,45 +57,33 @@ function Analytics() {
     return () => clearInterval(interval);
   }, []);
 
-  const filterOrdersByRange = (range, orders) => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let startDate;
-
-    switch (range) {
-      case "daily":
-        startDate = new Date(today);
-        break;
-      case "weekly":
-        startDate = new Date(today);
-        startDate.setDate(today.getDate() - 6);
-        break;
-      case "monthly":
-        startDate = new Date(today);
-        startDate.setMonth(today.getMonth() - 1);
-        break;
-      case "yearly":
-        startDate = new Date(today);
-        startDate.setFullYear(today.getFullYear() - 1);
-        break;
-      default:
-        return [];
-    }
-
-    return orders.filter((order) => {
-      const created = new Date(order.createdAt);
-      return created >= startDate && created <= now;
-    });
-  };
-
   const filteredOrders = useMemo(() => filterOrdersByRange(orderFilter, orders), [orderFilter, orders]);
 
   const total = filteredOrders.length;
   const servedCount = filteredOrders.filter(
-    (order) => order.status?.trim().toLowerCase() === "done" && order.type?.trim() === "Dine In"
-  ).length;
+    (order) => order.status?.trim().toLowerCase() === "done" || order,status?.trim().toLowerCase() === 'not picked up').length;
   const dineInCount = filteredOrders.filter((order) => order.type === "Dine In").length;
   const takeAwayCount = filteredOrders.filter((order) => order.type === "Take Away").length;
+
+  const pieData = useMemo(() => {
+    const servedPercentage = total > 0 ? Math.round((servedCount / total) * 100) : 0;
+    return [
+      ["Type", "Count"],
+      [`Served ${servedPercentage}%`, servedCount],
+      ["Dine In", dineInCount],
+      ["Take Away", takeAwayCount],
+    ];
+  }, [servedCount, dineInCount, takeAwayCount, total]);
+
+  const Pieoptions = {
+    title: "Order summary",
+    pieHole: 0.6,
+    is3D: false,
+    backgroundColor: "transparent",
+    colors: ["rgb(189, 189, 189)", "rgb(91,91,91)", "rgb(44,44,44)"],
+    pieSliceText: "none",
+    tooltip: { trigger: "focus" },
+  };
 
   const orderSummaryOptions = [
     { value: "daily", label: "Daily" },
@@ -139,23 +132,8 @@ function Analytics() {
     singleValue: (base) => ({ ...base, fontSize: "1rem", fontWeight: "500" }),
     indicatorsContainer: (base) => ({ ...base, height: "5vh" }),
   };
-const data = [
-                ["Type", "count"],
-                [`Served ${servedCount}%`, servedCount],
-                ["Dine In", dineInCount],
-                ["Take Away", takeAwayCount] 
+  console.log(filter)
 
-              ]
-
-  const Pieoptions = {
-    title:"Order summary",
-    pieHole:0.6,
-    is3D:false,
-    backgroundColor:"transparent",
-    colors:['rgb(189, 189, 189)', 'rgb(91,91,91)', 'rgb(44,44,44)'],
-    pieSliceText: "none",
-    tooltip: { trigger: "focus" }, 
-  }
   return (
     <div className={Styles.main}>
       <Navbar>
@@ -163,13 +141,15 @@ const data = [
           options={options}
           styles={customStyles}
           placeholder="Filter..."
-          value={filter}
-          onChange={setFilter}
+          value={options.find((opt) => opt.value === filter)}
+          onChange={(selected) => setFilter(selected.value)}
         />
       </Navbar>
+
       <div className={Styles.container}>
         <h1>Analytics</h1>
         <br />
+
         <div className={Styles.overall}>
           <OverallDetailsComponent value={chefs.length} tag={"Total chefs"} imag={PiBowlFood} />
           <OverallDetailsComponent value={`${totalRevenue}K`} tag={"Total Revenue"} imag={FaRupeeSign} />
@@ -177,8 +157,8 @@ const data = [
           <OverallDetailsComponent value={clients.length} tag={"Total clients"} imag={LiaUserFriendsSolid} />
         </div>
 
-        <div className={Styles.graphs}>
-          <div className={Styles.pie}>
+        <div className={`${Styles.graphs} ${filter !=""?Styles.notselectedDiv:""}`}>
+          <div className={`${Styles.pie} ${filter !="" && filter !='Order Summary'?Styles.notSelected:""}`}>
             <div className={Styles.divHead}>
               <div className={Styles.orderhead}>
                 <p className={Styles.orderP}>Order Summary</p>
@@ -191,6 +171,7 @@ const data = [
                 onChange={(selected) => setOrderFilter(selected.value)}
               />
             </div>
+
             <div className={Styles.summary}>
               <div className={Styles.innerSummary}>
                 <h1>{servedCount}</h1>
@@ -205,14 +186,19 @@ const data = [
                 <p>Take Away</p>
               </div>
             </div>
-            <div className={Styles.pie}>
-              
 
-              <Chart chartType="PieChart" options={Pieoptions} data={data} width={'100%'} height={'100%'} />
+            <div className={Styles.pie}>
+              <Chart
+                chartType="PieChart"
+                options={Pieoptions}
+                data={pieData}
+                width={"100%"}
+                height={"100%"}
+              />
             </div>
           </div>
- 
-          <div className={Styles.graph}>
+
+          <div className={`${Styles.graph} ${filter !="" && filter !='Revenue'?Styles.notSelected:""}`}>
             <div className={Styles.divHead}>
               <div className={Styles.orderhead}>
                 <p className={Styles.orderP}>Revenue</p>
@@ -221,13 +207,14 @@ const data = [
               <Select
                 options={orderSummaryOptions}
                 styles={customStylesOrder}
-                value={graphFilter}
-                onChange={setGraphFilter}
+                value={orderSummaryOptions.find((opt) => opt.value === graphFilter)}
+          onChange={(selected) => setGraphFilter(selected.value)}
               />
             </div>
+             <OrderChart data={graphData} title={`Order Stats (${graphFilter})`} />
           </div>
 
-          <div className={Styles.tableInfo}>
+          <div className={`${Styles.tableInfo} ${filter !="" && filter !='Table'?Styles.notSelected:""}`}>
             <div className={Styles.tabledivHead}>
               <h2>Tables</h2>
               <div className={Styles.statusDiv}>
@@ -241,6 +228,7 @@ const data = [
                 </div>
               </div>
             </div>
+
             <div className={Styles.tablesBody}>
               {tables.map((table, index) => (
                 <div
