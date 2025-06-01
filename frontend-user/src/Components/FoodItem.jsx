@@ -7,9 +7,6 @@ import { OrderContext } from "../context/OrderContext";
 function FoodItem({ item }) {
   const {order, setOrder, increaseQuantity, decreaseQuantity} = useContext(OrderContext)
   const [currentItem, setCurrentItem] = useState(null)
-  if(currentItem){
-    console.log(currentItem)
-  }
   const [quantity, setQuantity] = useState(0)
 
 

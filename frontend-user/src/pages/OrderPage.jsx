@@ -54,7 +54,6 @@ function OrderPage() {
     };
     try {
       const response = await addOrder(newOrder);
-      console.log("Order response:", response);
       return response;
     } catch (error) {
       console.error("Error placing order:", error);
@@ -86,13 +85,10 @@ function OrderPage() {
       const available = response.data.data.filter(
         (item) => item.status === "unreserved"
       );
-      console.log(available);
       setTable(available[0]);
-      console.log(response);
     };
 
     const setPrices = (order) => {
-      console.log(order);
       let total = 0;
       let taxe = 0;
       let delivery = 0;

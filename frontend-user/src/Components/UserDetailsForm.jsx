@@ -16,7 +16,6 @@ const handleAaddUser = async()=>{
         return
     }
     const response = await addUser(formData)
-    console.log(response)
     if(response.status===200 || response.status===201){
         setuser(response.data)
         showForm(false)

@@ -7,7 +7,6 @@ import { updateOrderStatus } from '../libs/services.js';
 
 
 function OrderDetails({order, setOrder, orders}) {
-  console.log(orders) 
     const options = [
       {value:"Not picked up", label:"Not picked up"},
       {value:"Picked up", label:"Picked up"},

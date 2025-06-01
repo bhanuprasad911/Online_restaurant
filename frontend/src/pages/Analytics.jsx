@@ -17,7 +17,6 @@ import { Chart } from "react-google-charts";
 import { filterOrdersByRange, aggregateOrders } from "../libs/utils.js";
 import OrderChart from "../components/OrderChart.jsx";
 
-
 function Analytics() {
   const [filter, setFilter] = useState("");
   const [clients, setClients] = useState([]);
@@ -28,24 +27,20 @@ function Analytics() {
   const [orderFilter, setOrderFilter] = useState("daily");
   const [graphFilter, setGraphFilter] = useState("daily");
 
-  const graphData = useMemo(() => aggregateOrders(orders, graphFilter), [orders, graphFilter]);
-  console.log(orders)
-
   const updateData = async () => {
-    const userData = await getUsers();
-    const chefData = await getChefs();
-    const orderData = await getOrders();
-    const tableData = await getAllTables();
+    const [userData, chefData, orderData, tableData] = await Promise.all([
+      getUsers(),
+      getChefs(),
+      getOrders(),
+      getAllTables(),
+    ]);
 
     setChefs(chefData.data);
     setOrders(orderData.data.data);
     setTables(tableData.data.data);
     setClients(userData.data.data);
 
-    let total = 0;
-    orderData.data.data.forEach((order) => {
-      total += order.total;
-    });
+    const total = orderData.data.data.reduce((acc, order) => acc + order.total, 0);
     setTotalRevenue(parseFloat((total / 1000).toFixed(1)));
   };
 
@@ -57,23 +52,39 @@ function Analytics() {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredOrders = useMemo(() => filterOrdersByRange(orderFilter, orders), [orderFilter, orders]);
+  const filteredOrders = useMemo(
+    () => filterOrdersByRange(orderFilter, orders),
+    [orderFilter, orders]
+  );
 
-  const total = filteredOrders.length;
-  const servedCount = filteredOrders.filter(
-    (order) => order.status?.trim().toLowerCase() === "done" || order,status?.trim().toLowerCase() === 'not picked up').length;
-  const dineInCount = filteredOrders.filter((order) => order.type === "Dine In").length;
-  const takeAwayCount = filteredOrders.filter((order) => order.type === "Take Away").length;
+  const orderTypeCounts = useMemo(() => {
+    const dineIn = filteredOrders.filter((order) => order.type === "Dine In").length;
+    const takeAway = filteredOrders.filter((order) => order.type === "Take Away").length;
+    const served = filteredOrders.filter((order) =>
+      ["Done", "Picked up"].includes(order.status)
+    ).length;
+
+    return { dineIn, takeAway, served, total: filteredOrders.length };
+  }, [filteredOrders]);
 
   const pieData = useMemo(() => {
-    const servedPercentage = total > 0 ? Math.round((servedCount / total) * 100) : 0;
+    const servedPercentage =
+      orderTypeCounts.total > 0
+        ? Math.round((orderTypeCounts.served / orderTypeCounts.total) * 100)
+        : 0;
+
     return [
       ["Type", "Count"],
-      [`Served ${servedPercentage}%`, servedCount],
-      ["Dine In", dineInCount],
-      ["Take Away", takeAwayCount],
+      [`Served ${servedPercentage}%`, orderTypeCounts.served],
+      ["Dine In", orderTypeCounts.dineIn],
+      ["Take Away", orderTypeCounts.takeAway],
     ];
-  }, [servedCount, dineInCount, takeAwayCount, total]);
+  }, [orderTypeCounts]);
+
+  const graphData = useMemo(
+    () => aggregateOrders(orders, graphFilter),
+    [orders, graphFilter]
+  );
 
   const Pieoptions = {
     title: "Order summary",
@@ -132,7 +143,6 @@ function Analytics() {
     singleValue: (base) => ({ ...base, fontSize: "1rem", fontWeight: "500" }),
     indicatorsContainer: (base) => ({ ...base, height: "5vh" }),
   };
-  console.log(filter)
 
   return (
     <div className={Styles.main}>
@@ -157,12 +167,12 @@ function Analytics() {
           <OverallDetailsComponent value={clients.length} tag={"Total clients"} imag={LiaUserFriendsSolid} />
         </div>
 
-        <div className={`${Styles.graphs} ${filter !=""?Styles.notselectedDiv:""}`}>
-          <div className={`${Styles.pie} ${filter !="" && filter !='Order Summary'?Styles.notSelected:""}`}>
+        <div className={`${Styles.graphs} ${filter !== "" ? Styles.notselectedDiv : ""}`}>
+          <div className={`${Styles.pie} ${filter !== "" && filter !== 'Order Summary' ? Styles.notSelected : ""}`}>
             <div className={Styles.divHead}>
               <div className={Styles.orderhead}>
                 <p className={Styles.orderP}>Order Summary</p>
-                <p className={Styles.orderTagP}>iyawhhbfvadyfvcyahcaougdaiuyfvhcauybcl</p>
+                <p className={Styles.orderTagP}>Breakdown of daily served, dine-in, and takeaway orders.</p>
               </div>
               <Select
                 options={orderSummaryOptions}
@@ -174,15 +184,15 @@ function Analytics() {
 
             <div className={Styles.summary}>
               <div className={Styles.innerSummary}>
-                <h1>{servedCount}</h1>
-                <p>served</p>
+                <h1>{orderTypeCounts.served}</h1>
+                <p>Served</p>
               </div>
               <div className={Styles.innerSummary}>
-                <h1>{dineInCount}</h1>
-                <p>Dine in</p>
+                <h1>{orderTypeCounts.dineIn}</h1>
+                <p>Dine In</p>
               </div>
               <div className={Styles.innerSummary}>
-                <h1>{takeAwayCount}</h1>
+                <h1>{orderTypeCounts.takeAway}</h1>
                 <p>Take Away</p>
               </div>
             </div>
@@ -198,23 +208,23 @@ function Analytics() {
             </div>
           </div>
 
-          <div className={`${Styles.graph} ${filter !="" && filter !='Revenue'?Styles.notSelected:""}`}>
+          <div className={`${Styles.graph} ${filter !== "" && filter !== 'Revenue' ? Styles.notSelected : ""}`}>
             <div className={Styles.divHead}>
               <div className={Styles.orderhead}>
                 <p className={Styles.orderP}>Revenue</p>
-                <p className={Styles.orderTagP}>iyawhhbfvadyfvcyahcaougdaiuyfvhcauybcl</p>
+                <p className={Styles.orderTagP}>Order revenue distribution over selected time ranges.</p>
               </div>
               <Select
                 options={orderSummaryOptions}
                 styles={customStylesOrder}
                 value={orderSummaryOptions.find((opt) => opt.value === graphFilter)}
-          onChange={(selected) => setGraphFilter(selected.value)}
+                onChange={(selected) => setGraphFilter(selected.value)}
               />
             </div>
-             <OrderChart data={graphData} title={`Order Stats (${graphFilter})`} />
+            <OrderChart data={graphData} title={`Order Stats (${graphFilter})`} />
           </div>
 
-          <div className={`${Styles.tableInfo} ${filter !="" && filter !='Table'?Styles.notSelected:""}`}>
+          <div className={`${Styles.tableInfo} ${filter !== "" && filter !== 'Table' ? Styles.notSelected : ""}`}>
             <div className={Styles.tabledivHead}>
               <h2>Tables</h2>
               <div className={Styles.statusDiv}>
@@ -233,9 +243,7 @@ function Analytics() {
               {tables.map((table, index) => (
                 <div
                   key={index}
-                  className={`${Styles.eachTable} ${
-                    table.status === "reserved" ? Styles.tableReserved : ""
-                  }`}
+                  className={`${Styles.eachTable} ${table.status === "reserved" ? Styles.tableReserved : ""}`}
                 >
                   <p>Table</p>
                   <p>{table.number}</p>

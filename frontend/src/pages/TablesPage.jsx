@@ -16,7 +16,6 @@ function TablesPage() {
   useEffect(()=>{
     const getTables = async () =>{
       const response = await getAllTables()
-      console.log(response)
       if(response.status === 200){
         setAllTables(response.data.data)
         setTabledata(response.data.data)
