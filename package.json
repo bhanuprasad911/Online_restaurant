@@ -1,0 +1,16 @@
+{
+  "name": "food-admin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+     "install-all": "npm install --prefix backend && npm install --prefix frontend && npm install --prefix frontend-user",
+    "build-admin": "npm run build --prefix frontend",
+    "build-user": "npm run build --prefix frontend-user",
+    "build": "npm run install-all && npm run build-admin && npm run build-user",
+    "start": "npm run start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

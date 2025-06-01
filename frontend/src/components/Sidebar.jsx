@@ -19,7 +19,8 @@ function Sidebar() {
         <Link to={'/orders'} className={Style.link}>
             <BiSolidFoodMenu color='black' size={25}/>
             </Link>
-        <Link to={'http://localhost:5174/'} className={Style.link}><MdBarChart color='black' size={30}/></Link>
+        <a href="/user" className={Style.link}><MdBarChart color='black' size={30}/></a>
+
             </div>
             <div className={Style.lower}>B</div>
         </div>
