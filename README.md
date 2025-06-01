@@ -10,7 +10,6 @@ A full-stack **restaurant management and food ordering system** built with **Nod
 
 ## 🚀 Live Demo
 
-> *Deployment not provided. Add Netlify/Render URLs here if hosted.*
 > for user: http://34.132.137.179:5002/user/
 
 > for admin: http://34.132.137.179:5002/admin/
