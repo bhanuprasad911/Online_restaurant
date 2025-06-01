@@ -63,7 +63,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const startServer = async () => {
   await dbConnection();
-  app.listen(port, () => {
+  app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 Server running on http://localhost:${port}`);
   });
 };
