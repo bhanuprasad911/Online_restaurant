@@ -79,6 +79,19 @@ const [totalItems, setTotalItems]=useState(0)
   // if (isLoading){
   //   return <div>Loading...!</div>
   // }
+  function getGreeting() {
+  const now = new Date();
+  const hour = now.getHours();
+
+  if (hour < 12) {
+    return "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good Afternoon";
+  }else {
+    return "Good Evening";
+  }
+}
+const wish = getGreeting();
 
   return (
     <div className={styles.main}>
@@ -86,7 +99,7 @@ const [totalItems, setTotalItems]=useState(0)
       <div className={styles.header}>
 
       <p className={styles.wish}>
-        Good evening <br />{" "}
+        {wish}<br />{" "}
         <span className={styles.span}>place your order here</span>
       </p>
       </div>
